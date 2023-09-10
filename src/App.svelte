@@ -97,10 +97,10 @@
 			<Hexagon></Hexagon>
 			<Hexagon></Hexagon>
 		</div>
+		<h1 style="margin-top: 2%; color: rgb(255, 100, 0)">
+			10464
+		</h1>
 	</div>
-	<h1 style="margin-top: 20%; color: rgb(255, 100, 0)">
-		10464
-	</h1>
 </main>
 
 <style>
