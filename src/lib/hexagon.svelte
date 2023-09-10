@@ -29,8 +29,8 @@
 		text-decoration: none;
 		vertical-align: middle;
 		user-select: none;
-		height: 5em;
-		width: 5.2em;
+		height: 7vh;
+		width: 7.7vh;
 		rotate: 90deg;
 		
 		outline: none;
