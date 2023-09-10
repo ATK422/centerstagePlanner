@@ -29,8 +29,9 @@
 		text-decoration: none;
 		vertical-align: middle;
 		user-select: none;
-		height: 7vh;
-		width: 7.7vh;
+		height: 3.5em;
+		width: 3.9em;
+		font-size: min(2vh, 2vw);
 		rotate: 90deg;
 		
 		outline: none;
@@ -38,7 +39,7 @@
 
 		margin-left: .5em;
 
-		--btn-raise: 1.3rem;
+		--btn-raise: 1.3em;
 		clip-path: polygon(var(--btn-raise) 0%, calc(100% - var(--btn-raise)) 0%, 100% 50%, calc(100% - var(--btn-raise)) 100%, var(--btn-raise) 100%, 0 50%);
 		background-color: #dda91b;
 		text-transform: uppercase;
