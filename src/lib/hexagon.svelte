@@ -34,6 +34,8 @@
 		font-size: min(2vh, 2vw);
 		rotate: 90deg;
 		
+		touch-action: manipulation;
+
 		outline: none;
 		border: none;
 
