@@ -20,7 +20,7 @@
 	.option {
 		background-color: rgb(57, 57, 57);
 		outline: none;
-		width: 6em;
+		width: 8em;
 		height: 2.5em;
 		border: 2px solid #50dd5f;
 		border-radius: 10px;
