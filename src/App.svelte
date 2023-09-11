@@ -19,9 +19,13 @@
 				{/if}
 			</div>
 		{/each}
-		<h2 style="margin-top: 2%; color: rgb(255, 100, 0)">10464</h2>
+		<div style="margin-top: 5%"></div>
+		{#if !$getOption("footer")}
+			<h2 style="color: rgb(255, 100, 0)">10464</h2>
+		{/if}
 		<div>
 			<Option getOption={getOption} setOption={setOption} name="setlines" richName="set lines"></Option>
+			<Option getOption={getOption} setOption={setOption} name="footer" richName="hide footer"></Option>
 		</div>
 	</div>
 </main>
