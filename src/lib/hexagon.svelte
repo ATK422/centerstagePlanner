@@ -44,7 +44,6 @@
 		--btn-raise: 1.3em;
 		clip-path: polygon(var(--btn-raise) 0%, calc(100% - var(--btn-raise)) 0%, 100% 50%, calc(100% - var(--btn-raise)) 100%, var(--btn-raise) 100%, 0 50%);
 		background-color: #dda91b;
-		text-transform: uppercase;
 	}
 </style>
 
