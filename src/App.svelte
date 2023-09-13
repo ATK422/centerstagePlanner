@@ -43,7 +43,7 @@
 		<h2 style="color: rgb(255, 100, 0)">{score != 0 ? score : 10464}</h2>
 		<div>
 			<Option getOption={getOption} setOption={setOption} name="setlines" richName="set lines"></Option>
-			<button on:click={share}>Copy</button>
+			<button on:click={share}>copy board</button>
 			<!-- <Option getOption={getOption} setOption={setOption} name="footer" richName="hide footer"></Option> -->
 		</div>
 	</div>
