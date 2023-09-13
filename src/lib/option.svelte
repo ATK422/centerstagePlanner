@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from "svelte";
 	import type { GetOption, SetOption } from "./options";
 
 	export let getOption: GetOption
@@ -17,6 +16,8 @@
 <button on:click={onClick} class="option" style="border-color: {color}">{richName}</button>
 
 <style>
+	@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+
 	.option {
 		background-color: rgb(57, 57, 57);
 		outline: none;
@@ -26,6 +27,8 @@
 		border-radius: 10px;
 		cursor: pointer;
 		transition: .2s;
+		font-family: 'Josefin Sans', sans-serif;
+
 	}
 	.option:hover {
 		background-color: rgb(47, 47, 47);

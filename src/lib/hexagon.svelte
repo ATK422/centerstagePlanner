@@ -1,24 +1,42 @@
 <script lang="ts">
-	let state: number = 0
-	let color = "#505050"
-	const update = () => {
-		if (state == 4) {
-			state = 0
-		} else {
-			state += 1
-		}
+	import { PixelType, type Pixels } from "./pixels";
 
-		if (state == 0) {
-			color = "#505050"
-		} else if (state == 1) {
-			color = "#d8d8d8"
-		} else if (state == 2) {
-			color = "#dda91b"
-		} else if (state == 3) {
-			color = "#22b01d"
-		} else if (state == 4) {
-			color = "#b684c2"
+	export let pixels: Pixels
+	export let row: number
+	export let column: number
+
+	function determineColor(state: PixelType) {
+		switch (pixels.map[row][column]) {
+			case PixelType.None:
+				return "#505050";
+			case PixelType.White:
+				return "#d8d8d8";
+			case PixelType.Yellow:
+				return "#dda91b";
+			case PixelType.Green:
+				return "#22b01d";
+			case PixelType.Purple:
+				return "#b684c2";
+			default:
+				return "#505050";
 		}
+	}
+
+	const values = Object.values(PixelType)
+	const map = new Map(values.map((k, i) => [k, values[i + 1]]));
+
+	let color = determineColor(pixels.get(row, column))
+	function update() {
+		const pixel = pixels.get(row, column)
+		let next: PixelType
+		if (pixel == PixelType.Purple) {
+			next = PixelType.None
+		} else {
+			next = map.get(pixel)! as PixelType
+		}
+		pixels.set(row, column, next)
+
+		color = determineColor(pixels.get(row, column))
 	}
 </script>
 
@@ -47,6 +65,4 @@
 	}
 </style>
 
-<button on:click={update} style="background-color: {color}">
-	
-</button>
+<button on:click={update} style="background-color: {color}"></button>
