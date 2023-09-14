@@ -61,7 +61,7 @@
 		outline: none;
 		width: 8em;
 		height: 2.5em;
-		border: 2px solid #50dd5f;
+		border: 2px solid #dd5b4f;
 		border-radius: 10px;
 		cursor: pointer;
 		transition: .2s;
@@ -70,6 +70,9 @@
 	}
 	button:hover {
 		background-color: rgb(47, 47, 47);
+	}
+	button:focus {
+		border: 2px solid #50dd5f;
 	}
 
 	.setline {
