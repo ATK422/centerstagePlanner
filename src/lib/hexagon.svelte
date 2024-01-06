@@ -65,4 +65,4 @@
 	}
 </style>
 
-<button on:click={update} style="background-color: {color}"></button>
+<button on:click={update} style="background-color: {color};"></button>

@@ -4,7 +4,7 @@
 	import { createOptionsStore } from './lib/options';
 	import { Pixels } from './lib/pixels';
 
-	const { getOption, setOption } = createOptionsStore();
+	const { getOption, setOption } = createOptionsStore(JSON.parse(localStorage["options"]));
 
 	let pixels: Pixels
 	const path = window.location.pathname.replaceAll("/", "")
@@ -27,24 +27,33 @@
 </script>
 
 <main>
-	<div style="style: flex; height: 60vh; position: relative">
-		{#each Array(11) as _, row}
-			<div class="line">
-				{#each Array(6 + (row) % 2) as _, column}
-					<Hexagon pixels={pixels} row={10-row} column={column}></Hexagon>
-				{/each}
+	<div style="display: flex; flex-direction: column; align-items: center; height: 85vh;">
+		<div style="display: flex; flex-direction: row; width: 100vw; justify-content: center;">
+			<div style="display: flex; flex-direction: column; justify-content: center; width: 49%; height: 120%">
+				{#each Array(11) as _, row}
+					<div class="line" style="margin-right: {row % 2 == 0 ? 3.9 / 2 : 0}em">
+						{#each Array(6 + (row) % 2) as _, column}
+							<Hexagon pixels={pixels} row={10-row} column={column}></Hexagon>
+						{/each}
 
-				{#if $getOption("setlines") && (row - 1) % 3 == 0 && row != 10}
-					<div class="setline" style="top: {row}"></div>
-				{/if}
+						{#if $getOption("setlines") && (row - 1) % 3 == 0 && row != 10}
+							<div class="setline" style="top: {row}"></div>
+						{/if}
+					</div>
+				{/each}
 			</div>
-		{/each}
+			{#if $getOption("mode")}
+				<div style="display: flex; width: 49%">
+					<h1>Scoring</h1>
+				</div>
+			{/if}
+		</div>
 		<div style="margin-top: 5%"></div>
 		<h2 style="color: rgb(255, 100, 0)">{score != 0 ? score : 10464}</h2>
 		<div>
 			<Option getOption={getOption} setOption={setOption} name="setlines" richName="set lines"></Option>
+			<Option getOption={getOption} setOption={setOption} name="mode" richName="scoring mode"></Option>
 			<button on:click={share}>copy board</button>
-			<!-- <Option getOption={getOption} setOption={setOption} name="footer" richName="hide footer"></Option> -->
 		</div>
 	</div>
 </main>
@@ -53,7 +62,8 @@
 	.line {
 		/* height: max(7vh, 7vw); */
 		/* width: max(80vw, 80vh); */
-		padding: 0%
+		margin-left: auto;
+		padding: 0%;
 	}
 
 	button {
@@ -78,7 +88,7 @@
 	.setline {
 		background-color: rgb(125, 125, 125); 
 		height: 1.25vh; 
-		width: 100%; 
+		width: 34.3em; 
 		position: absolute; 
 		border-radius: 30px;
 		z-index: -1;
