@@ -8,6 +8,29 @@ export enum PixelType {
 	"Purple",
 }
 
+class Pixel {
+	type: PixelType;
+	row: number;
+	column: number;
+	constructor(type: PixelType, row: number, column: number) {
+		this.type = type;
+		this.row = row;
+		this.column = column;
+	}
+
+	equals(other: Pixel): boolean {
+		return (
+			this.type == other.type &&
+			this.row == other.row &&
+			this.column == other.column
+		);
+	}
+
+	toString(): string {
+		return `(${this.type}, ${this.row}, ${this.column})`;
+	}
+}
+
 export class Pixels {
 	//Rows > Columns
 	map: Array<Array<PixelType>>;
@@ -17,95 +40,156 @@ export class Pixels {
 		if (!init) {
 			this.map = Array(11);
 			for (let row = 0; row < this.map.length; row++) {
-				console.log(this.map[row]);
 				this.map[row] = Array(6 + (row % 2));
 				this.map[row].fill(PixelType.None);
 			}
 		} else {
-			this.map = init
+			this.map = init;
 		}
 	}
 
-	isValid(row: number, column: number): boolean {
-		return (
-			row >= 0 &&
-			row < this.map.length &&
-			column >= 0 &&
-			column < this.map[row].length
+	forEach(callback: (pixel: Pixel) => boolean | void) {
+		for (let row = 0; row < this.map.length; row++) {
+			for (let column = 0; column < this.map[row].length; column++) {
+				const bool = callback(this.getPixel(row, column));
+				if (bool === true) continue;
+				else if (bool === false) break;
+			}
+		}
+	}
+
+	getNeighbors(pixel: Pixel): Array<Pixel> {
+		const neighbors: Array<Pixel> = [];
+		const { row, column } = pixel;
+		const offset = (row + 1) % 2 === 0 ? 1 : 0;
+
+		const addNeighbor = (r: number, c: number) => {
+			const neighborType = this.get(r, c);
+			if (neighborType !== PixelType.None && neighborType !== undefined) {
+				neighbors.push(this.getPixel(r, c));
+			}
+		};
+
+		addNeighbor(row + 1, column - offset); // Bottom left
+		addNeighbor(row + 1, column + 1); // Bottom right
+		addNeighbor(row, column - 1); // Left
+		addNeighbor(row, column + 1); // Right
+		addNeighbor(row - 1, column - offset); // Top left
+		addNeighbor(row - 1, column + 1 - offset); // Top right
+
+		return neighbors;
+	}
+
+	getColoredNeighbors(pixel: Pixel): Array<Pixel> {
+		return this.getNeighbors(pixel).filter(
+			(p) => p.type != PixelType.None && p.type != PixelType.White
 		);
 	}
 
-	isColored(x: number, y: number, color: PixelType): boolean {
-		return this.get(x, y) === color;
-	}
+	getGroup(pixel: Pixel): Array<Pixel> {
+		const group = [];
+		const stack = [pixel];
+		const visited = Array.from({ length: this.map.length }, () =>
+			Array(this.map[0].length).fill(false)
+		);
 
-	isAdjacent(x1: number, y1: number, x2: number, y2: number): boolean {
-		return Math.abs(x1 - x2) <= 1 && Math.abs(y1 - y2) <= 1;
-	}
+		const isValid = (row: number, column: number): boolean =>
+			(row >= 0 &&
+				row < visited.length &&
+				column >= 0 &&
+				column < visited[row].length) ||
+			true;
 
-	countAdjacentColored(x: number, y: number, color: PixelType): number {
-		let count = 0;
-		for (let dx = -1; dx <= 1; dx++) {
-			for (let dy = -1; dy <= 1; dy++) {
-				if (dx === 0 && dy === 0) continue;
-				const newX = x + dx;
-				const newY = y + dy;
-				if (this.isColored(newX, newY, color)) {
-					count++;
-				}
+		while (stack.length > 0) {
+			const currentPixel = stack.pop();
+
+			if (
+				currentPixel &&
+				isValid(currentPixel.row, currentPixel.column) &&
+				!visited[currentPixel.row][currentPixel.column]
+			) {
+				visited[currentPixel.row][currentPixel.column] = true;
+				group.push(currentPixel);
+
+				const neighbors = this.getColoredNeighbors(currentPixel);
+				stack.push(...neighbors);
 			}
 		}
-		return count;
+
+		return group;
 	}
 
-	dfs(
-		x: number,
-		y: number,
-		group: PixelType[][],
-		groups: PixelType[][][]
-	): void {
-		const currentColor = this.get(x, y);
-		if (group.length === 3) {
-			const uniqueColors = new Set(group.flat());
-			if (uniqueColors.size >= 2) {
-				groups.push([...group]);
-			}
-			return;
-		}
+	validMosaic(group: Array<Pixel>): boolean {
+		if (group.length != 3) return false;
 
-		for (let dx = -1; dx <= 1; dx++) {
-			for (let dy = -1; dy <= 1; dy++) {
-				const newX = x + dx;
-				const newY = y + dy;
-				if (
-					this.isValid(newX, newY) &&
-					this.isColored(newX, newY, currentColor) &&
-					this.countAdjacentColored(newX, newY, currentColor) >= 2
-				) {
-					group.push([currentColor, this.get(newX, newY)]);
-					this.dfs(newX, newY, group, groups);
-					group.pop();
-				}
-			}
-		}
+		const types = new Set<PixelType>();
+		for (const pixel of group) types.add(pixel.type);
+
+		return types.size == 1 || types.size == 3;
+	}
+
+	getHighestSetline(pixel: Pixel): number {
+		//Setlines are rows that increase by 3 from the bottom so 3, 6, 9
+		const { row } = pixel;
+
+		if (row >= 8) return 30;
+		else if (row >= 5) return 20;
+		else if (row >= 2) return 10;
+		else return 0;
 	}
 
 	calculate() {
-		const groups = [[[]]];
-		for (let x = 0; x < this.map.length; x++) {
-			for (let y = 0; y < this.map[x].length; y++) {
-				const currentColor = this.get(x, y);
-				if (
-					currentColor !== PixelType.None &&
-					currentColor !== PixelType.White
-				) {
-					this.dfs(x, y, [[currentColor]], groups);
+		const groups: Array<Array<Pixel>> = [];
+		const visited = new Set<string>();
+
+		function hasVisited(pixel: Pixel): boolean {
+			return visited.has(pixel.toString());
+		}
+
+		function markVisited(group: Array<Pixel>) {
+			group.forEach((pixel) => visited.add(pixel.toString()));
+		}
+
+		// Find connected groups of colored pixels
+		this.forEach((pixel) => {
+			if (
+				hasVisited(pixel) ||
+				pixel.type === PixelType.None ||
+				pixel.type === PixelType.White
+			) {
+				return true; // Continue
+			}
+
+			const group = this.getGroup(pixel);
+			groups.push(group);
+			markVisited(group);
+		});
+
+		// Calculate score
+		let score = 0;
+		let setLine = 0;
+
+		// Iterate through pixels to calculate score and setLine
+		this.forEach((pixel) => {
+			if (pixel.type !== PixelType.None) {
+				score += 3;
+				const newSetLine = this.getHighestSetline(pixel);
+				if (setLine < newSetLine) {
+					setLine = newSetLine;
 				}
+			}
+		});
+		score += setLine;
+
+		// Check validity of mosaic for each group
+		for (const group of groups) {
+			if (this.validMosaic(group)) {
+				score += 10;
 			}
 		}
 
-		console.log(groups);
-		// this.score.set(groups.length * 3);
+		// Update the score in the writable store
+		this.score.set(score);
 	}
 
 	get(row: number, column: number): PixelType {
@@ -113,10 +197,15 @@ export class Pixels {
 		return r ? r[column] : PixelType.None;
 	}
 
+	getPixel(row: number, column: number): Pixel {
+		return new Pixel(this.get(row, column), row, column);
+	}
+
 	set(row: number, column: number, value: PixelType) {
 		this.map[row][column] = value;
+		console.log("Oriental: ", row, column, value);
 		this.map = this.map;
-		// this.calculate();
+		this.calculate();
 	}
 
 	tob64(): string {

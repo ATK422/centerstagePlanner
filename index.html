@@ -9,13 +9,15 @@
 	<body>
 		<div id="app"></div>
 		<script type="module" src="/src/main.ts"></script>
+		
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-RXT381Q8B9"></script>
 		<script>
-			window.va =
-				window.va ||
-				function () {
-					(window.vaq = window.vaq || []).push(arguments);
-				};
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'G-RXT381Q8B9');
 		</script>
-		<script defer src="/_vercel/insights/script.js"></script>
 	</body>
 </html>
