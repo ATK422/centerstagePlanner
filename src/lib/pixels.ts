@@ -35,6 +35,7 @@ export class Pixels {
 	//Rows > Columns
 	map: Array<Array<PixelType>>;
 	score: Writable<number> = writable(0);
+	active: string = "none";
 
 	constructor(init?: Array<Array<PixelType>>) {
 		if (!init) {

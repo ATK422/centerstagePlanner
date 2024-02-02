@@ -25,14 +25,35 @@
 	const values = Object.values(PixelType)
 	const map = new Map(values.map((k, i) => [k, values[i + 1]]));
 
+	function nameToPixelType(name: string) {
+		switch (name) {
+			case "empty":
+				return PixelType.None;
+			case "white":
+				return PixelType.White;
+			case "yellow":
+				return PixelType.Yellow;
+			case "green":
+				return PixelType.Green;
+			case "purple":
+				return PixelType.Purple;
+			default:
+				return PixelType.None;
+		}
+	}
+
 	let color = determineColor(pixels.get(row, column))
 	function update() {
 		const pixel = pixels.get(row, column)
 		let next: PixelType
-		if (pixel == PixelType.Purple) {
-			next = PixelType.None
+		if (pixels.active == "none") {
+			if (pixel == PixelType.Purple) {
+				next = PixelType.None
+			} else {
+				next = map.get(pixel)! as PixelType
+			}
 		} else {
-			next = map.get(pixel)! as PixelType
+			next = nameToPixelType(pixels.active)
 		}
 		pixels.set(row, column, next)
 
