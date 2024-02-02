@@ -86,7 +86,8 @@
 <style>
 	.line {
 		/* height: max(7vh, 7vw); */
-		/* width: max(80vw, 80vh); */
+		/* width: max(55vw, 55vh); */
+		position: relative;
 		padding: 0%;
 	}
 
@@ -132,7 +133,8 @@
 	.setline {
 		background-color: rgb(125, 125, 125);
 		height: 1.25vh;
-		width: 100%;
+		left: 0;
+		right: 0;
 		position: absolute;
 		border-radius: 30px;
 		z-index: -1;
