@@ -68,8 +68,7 @@
 				{/if}
 			</div>
 		{/each}
-		<div style="margin-top: 5%"></div>
-		<h2 style="color: rgb(255, 100, 0)">{score != 0 ? score : 10464}</h2>
+		<h2 style="color: rgb(255, 100, 0); margin-top: .5em; margin-bottom: .5em">{score != 0 ? score : 10464}</h2>
 		<div>
 			<Option
 				{getOption}
