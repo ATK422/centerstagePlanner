@@ -9,6 +9,14 @@
 	<body>
 		<div id="app"></div>
 		<script type="module" src="/src/main.ts"></script>
+		<script>
+			window.va =
+				window.va ||
+				function () {
+					(window.vaq = window.vaq || []).push(arguments);
+				};
+		</script>
+		<script defer type="module" src="/_vercel/insights/script.js"></script>
 
 		<!-- Google tag (gtag.js) -->
 		<script
@@ -24,15 +32,5 @@
 
 			gtag("config", "G-RXT381Q8B9");
 		</script>
-
-		<!-- Vercel analytics incase google fails -->
-		<script>
-			window.va =
-				window.va ||
-				function () {
-					(window.vaq = window.vaq || []).push(arguments);
-				};
-		</script>
-		<script defer src="/_vercel/insights/script.js"></script>
 	</body>
 </html>
