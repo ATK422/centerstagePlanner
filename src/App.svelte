@@ -13,6 +13,7 @@
 	} else {
 		pixels = new Pixels();
 	}
+ pixels.calculate();
 
 	const s = pixels.score;
 	$: score = $s;
