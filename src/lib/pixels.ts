@@ -72,7 +72,7 @@ export class Pixels {
 		};
 
 		addNeighbor(row + 1, column - offset); // Bottom left
-		addNeighbor(row + 1, column + 1); // Bottom right
+		addNeighbor(row + 1, column + 1 - offset); // Bottom right
 		addNeighbor(row, column - 1); // Left
 		addNeighbor(row, column + 1); // Right
 		addNeighbor(row - 1, column - offset); // Top left
@@ -121,6 +121,7 @@ export class Pixels {
 	}
 
 	validMosaic(group: Array<Pixel>): boolean {
+		console.log("Group: ", group);
 		if (group.length != 3) return false;
 
 		const types = new Set<PixelType>();
