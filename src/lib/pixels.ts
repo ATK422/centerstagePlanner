@@ -127,7 +127,19 @@ export class Pixels {
 		const types = new Set<PixelType>();
 		for (const pixel of group) types.add(pixel.type);
 
-		return types.size == 1 || types.size == 3;
+		if (types.size != 1 && types.size != 3) return false;
+
+		const neighborsCount = new Map<Pixel, number>();
+		for (const pixel of group) {
+			const neighbors = this.getColoredNeighbors(pixel);
+			neighborsCount.set(pixel, neighbors.length);
+		}
+
+		for (const count of neighborsCount.values()) {
+			if (count != 2) return false;
+		}
+
+		return true;
 	}
 
 	getHighestSetline(pixel: Pixel): number {
